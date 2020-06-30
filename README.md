@@ -1,6 +1,7 @@
 # 일->한 번역 크롬 확장프로
-by sjdwr
-<br>
+by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/lpaqkosw'>lpaqkosw</a>
+
+<br><br>
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/top.gif" width="400" height="400">
 <br><br><br><br>
 
