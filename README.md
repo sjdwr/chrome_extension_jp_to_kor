@@ -23,6 +23,6 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/sample2.gif" width="884" height="272">
 <br><br><br><br>
 
-### 추가
-* <s>css</s> (2020.06.30 pending)
+### 기타
+* <s>css추가</s> (2020.06.30 pending)
 
