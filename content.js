@@ -56,7 +56,7 @@ document.addEventListener("click", function (ev)
 		document.body.insertBefore(div, document.body.childNodes[0]); //html의 body 태그 첫번째child로 div태그 주입
 		
 		div.setAttribute("style","position:absolute;z-index:16000;top:"+(window.scrollY+ev.clientY+100)+"px;left:"+ev.clientX+"px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin-right:-50%;padding:0;transform:translate(-50%,-50%);-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;background-color:#fff;-webkit-box-shadow:0 0 18px 3px rgba(0,0,0,.07);-moz-box-shadow:0 0 18px 3px rgba(0,0,0,.07);box-shadow:0 0 18px 3px rgba(0,0,0,.07);padding:10px");
-		div.innerHTML = "<p>번역 중 입니다..</p>"; //생성한 div태그에 내용 주입
+		div.innerHTML = "<p>번역 중 입니다..</p><div class='sjdwr_papago_jp_to_kor'></div>"; //생성한 div태그에 내용 주입
 
 		chrome.runtime.sendMessage({	//body와 origin으로 구성된 메시지 backgroundjs로 보냄
 			body: selection,

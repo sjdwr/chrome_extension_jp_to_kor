@@ -23,7 +23,8 @@
           "https://*/*",
           "http://*/*"
         ],
-        "js": ["jquery-3.4.1.min.js", "content.js"]
+        "js": ["jquery-3.4.1.min.js", "content.js"],
+        "css" :["mycss.css"]
     }],
     "commands": {
         "_execute_browser_action": {
