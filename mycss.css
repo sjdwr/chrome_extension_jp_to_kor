@@ -4,6 +4,7 @@
     border-radius: 50%;
     width: 30px;
     height: 30px;
+    margin: 0 auto;
     animation: sjdwr_papago_jp_to_kor_spin 0.7s ease-in-out infinite;
   }
   
