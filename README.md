@@ -1,4 +1,4 @@
-# 일->한 번역 크롬 확장프로
+# 번역 크롬 확장프로그램
 by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/lpaqkosw'>lpaqkosw</a>
 
 <br><br>
