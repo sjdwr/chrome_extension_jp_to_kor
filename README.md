@@ -2,7 +2,7 @@
 by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/lpaqkosw'>lpaqkosw</a>
 
 <br><br>
-<img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/TOP.gif" width="522" height="384">
+<img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/TOP.gif.gif" width="522" height="384">
 <br><br><br><br>
 
 ## 기능
