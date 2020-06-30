@@ -24,5 +24,9 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 <br><br><br><br>
 
 ### 기타
-* <s>css추가</s> (2020.06.30 pending)
+* <s>css파일 추가</s> (2020.06.30)
+* 언어 추가
+* 번역 이력
+* on/off
+
 
