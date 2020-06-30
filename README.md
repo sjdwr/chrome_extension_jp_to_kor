@@ -20,7 +20,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 
 ## 사용법
 1. 번역하고싶은 일본어를 드래그해서 선택한다<br><br>
-<img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/sample.gif" width="884" height="563">
+<img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/sample2.gif" width="884" height="272">
 <br><br><br><br>
 
 ### 추가
