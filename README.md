@@ -11,7 +11,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 * 파파고 링크
 
 ## 설치법
-1. chrome://extentions에서 개발자 모드를 킨다 <br><br>
+1. <a href='chrome://extentions'>chrome://extentions</a>에서 개발자 모드를 킨다 <br><br>
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/devmode.gif" width="946" height="171">
 <br><br><br><br>
 2. 해당 프로젝트 폴더를 로드한다 <br><br>
