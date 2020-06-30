@@ -20,5 +20,5 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 <br><br><br><br>
 
 ### 추가
-* css
-* 
+* <s>css</s> (2020.06.30)
+
