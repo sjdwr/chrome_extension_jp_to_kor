@@ -24,9 +24,10 @@ var prevContents = null;
 // 	if (dst_language == null)
 // 		dst_language = "en";
 // }
+
 function getSrc(){
 	return new Promise((resolve, reject) =>{
-		chrome.storage.sync.get('srclangunage', function (r) {
+		chrome.storage.sync.get('srclangunage', r => {
 			resolve(r.srclangunage);
 		});
 	})
@@ -34,21 +35,24 @@ function getSrc(){
 
 function getDst(){
 	return new Promise((resolve, reject) =>{
-		chrome.storage.sync.get('dstlangunage', function (r) {
+		chrome.storage.sync.get('dstlangunage', r => {
 			resolve(r.dstlangunage);
 		});
 	})
 }
 
+
 document.addEventListener("click", async function (ev) 
 {
-	
-	let src = await getSrc();
-	let dst = await getDst();
 	//chrome.storage.sync.get('execute', function (r) {
 	//	if (!r['execute'])
 	//		return;
 	//});	
+
+	let src_language = await getSrc(); //src 긁어옴
+	let dst_language = await getDst(); //dst 긁어옴
+
+
 	var selection = window.getSelection().toString(); //선택한 텍스트 뽑음
 	var obj;
 
@@ -64,7 +68,7 @@ document.addEventListener("click", async function (ev)
 	{
 		var sp = 0;
 		
-		switch (src)
+		switch (src_language)
 		{
 			case "ko":
 			{
@@ -140,9 +144,8 @@ document.addEventListener("click", async function (ev)
 		div.innerHTML = "<p>번역 중 입니다..</p><div class='sjdwr_papago_jp_to_kor'></div>"; //생성한 div태그에 내용 주입
 
 		chrome.runtime.sendMessage({	//body와 origin으로 구성된 메시지 backgroundjs로 보냄
-			to: src
-			,
-			from: dst,
+			to: src_language,
+			from: dst_language,
 			body: selection,
 			origin: "content"
 		}, function (response) 

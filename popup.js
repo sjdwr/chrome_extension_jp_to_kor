@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', ()=>
+document.addEventListener('DOMContentLoaded', 
+
+function()
 {
 	var src_ctrl = document.getElementById('src_language');  
 	var dst_ctrl = document.getElementById('dst_language');  
