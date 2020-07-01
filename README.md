@@ -29,5 +29,5 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 * 번역 이력
 * on/off
 * css 개선
-
+* 언어 
 
