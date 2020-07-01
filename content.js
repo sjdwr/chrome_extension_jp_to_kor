@@ -41,6 +41,13 @@ function getDst(){
 	})
 }
 
+function getExecute(){
+	return new Promise((resolve, reject) =>{
+		chrome.storage.sync.get('execute', r => {
+			resolve(r.execute);
+		});
+	})
+}
 
 document.addEventListener("click", async function (ev) 
 {
@@ -51,7 +58,7 @@ document.addEventListener("click", async function (ev)
 
 	let src_language = await getSrc(); //src_language 긁어옴
 	let dst_language = await getDst(); //dst_language 긁어옴
-
+	let execute = await getExecute(); //execute 긁어옴
 
 	var selection = window.getSelection().toString(); //선택한 텍스트 뽑음
 	var obj;
