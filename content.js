@@ -49,8 +49,8 @@ document.addEventListener("click", async function (ev)
 	//		return;
 	//});	
 
-	let src_language = await getSrc(); //src 긁어옴
-	let dst_language = await getDst(); //dst 긁어옴
+	let src_language = await getSrc(); //src_language 긁어옴
+	let dst_language = await getDst(); //dst_language 긁어옴
 
 
 	var selection = window.getSelection().toString(); //선택한 텍스트 뽑음
