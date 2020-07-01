@@ -1,3 +1,9 @@
+function sleep(delay)
+{
+   var start = new Date().getTime();
+   while (new Date().getTime() < start + delay);
+}
+
 function genRand(e)  
 {
 	// e 길이의 랜덤 문자 생성
@@ -130,13 +136,13 @@ function getRequest(url)
 	}
 
 	xhr.send();
-	
+
 	return JS;
 }
 
-function PapagoTranslate(e)
+function PapagoTranslate(src, dst, e)
 {
-	var json = '{"deviceId":"61ec832f-0b2d-433e-b92f-1a9a7c4e8fc1","dict":true,"dictDisplay":30,"honorific":false,"instant":false,"paging":false,"source":"ja","target":"ko","text":"' + e + '"}';
+	var json = '{"deviceId":"61ec832f-0b2d-433e-b92f-1a9a7c4e8fc1","dict":true,"dictDisplay":30,"honorific":false,"instant":false,"paging":false,"source":"' + src + '","target":"' + dst + '","text":"' + e + '"}';
 	
 	json = json + afterAdd(json);
 	json = encodeString(json);
@@ -183,15 +189,12 @@ function PapagoTranslate(e)
 	return JS.translatedText;
 }
 
-function sleep(delay)
-{
-   var start = new Date().getTime();
-   while (new Date().getTime() < start + delay);
-}
-
-function PapagoPhoneticCharacters(e)
+function PapagoPhoneticCharacters(lan, e)
 {
 	var ew = false;
+	
+	if (lan != "ja")	// 일본어만 해당되는 함수 입니다.
+		return e;
 	
 	for (var i = 0, ds; i < e.length; ++i)
 	{
@@ -228,7 +231,7 @@ function PapagoPhoneticCharacters(e)
 		return e;
 	
 	var rubyTag = "";
-	var Onsen = "";
+	//var Onsen = "";
 	
 	var phObj;
 	var prv = 0;
@@ -240,7 +243,7 @@ function PapagoPhoneticCharacters(e)
 		if (prv != phObj.s)
 		{
 			rubyTag += e.substring(prv, phObj.s);
-			Onsen += e.substring(prv, phObj.s);
+			//Onsen += e.substring(prv, phObj.s);
 		}
 					
 		rubyTag += 
@@ -251,17 +254,17 @@ function PapagoPhoneticCharacters(e)
 				"</rt>" +
 			"</ruby>";
 						
-		Onsen += phObj.p;
+		//Onsen += phObj.p;
 		prv = phObj.e;
 	}
 	
 	if (prv != e.length)
 	{
 		rubyTag += e.substring(prv, e.length);
-		Onsen += e.substring(prv, e.length);
+		//Onsen += e.substring(prv, e.length);
 	}
 	
-	return rubyTag + "%^@eryjdnxw32es^@%" + Onsen;
+	return rubyTag;// + "%^@eryjdnxw32es^@%" + Onsen;
 }
 
 //contentjs에서 보낸 메시지를 여기서 받음.
@@ -270,12 +273,12 @@ function PapagoPhoneticCharacters(e)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.origin === 'content') {
         console.log("background: "+ message.subject);
-        var translate = PapagoTranslate(message.body);
+        var translate = PapagoTranslate(message.to, message.from, message.body);
 		sleep(500);
-		var phonetic = PapagoPhoneticCharacters(message.body);
-		translate += "%^@eryjdnxw32es^@%" + phonetic;
+		var phonetic = PapagoPhoneticCharacters(message.to, message.body);
         sendResponse({
-            body:translate,
+            trans: translate,
+			ph: phonetic,
         })
     } 
 });

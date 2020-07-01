@@ -1,20 +1,18 @@
-.sjdwr_papago_jp_to_kor {
-    border: 8px solid #ffffff; /* Light grey */
-    border-top: 8px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin: 0 auto;
-    animation: sjdwr_papago_jp_to_kor_spin 0.7s ease-in-out infinite;
-}
-  
-@keyframes sjdwr_papago_jp_to_kor_spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@charset 'UTF-8';
+
+body {
+	width:200px;
 }
 
+.options {
+	padding:20px 0;
+}
 
-  .sjdwr_papago_jp_to_kor_switch {
+.select_language {
+	width:150px;
+}
+
+.sjdwr_papago_jp_to_kor_switch {
     position: relative;
     display: inline-block;
     width: 30px;
