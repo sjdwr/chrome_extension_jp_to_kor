@@ -30,5 +30,3 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 * on/off
 * css 개선
 * 언어 자동감지
-
-
