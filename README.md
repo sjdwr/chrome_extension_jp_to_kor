@@ -6,7 +6,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 <br><br><br><br>
 
 ## 기능
-* 일->한 번역
+* 일한영 -> 일한영 번역
 * 일어 음성
 * 파파고 링크
 
