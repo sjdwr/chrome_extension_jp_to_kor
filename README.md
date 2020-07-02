@@ -12,7 +12,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 
 ## 설치법
 1. <a href='chrome://extensions'>chrome://extensions</a>에서 개발자 모드를 킨다 <br><br>
-<img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/devmode.gif" width="946" height="171" border="1" >
+<kbd><img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/devmode.gif" width="946" height="171"></kbd>
 <br><br><br><br>
 2. 해당 프로젝트 폴더를 로드한다 <br><br>
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/upload.gif" width="946" height="171">
