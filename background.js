@@ -121,7 +121,7 @@ function getRequest(url)
 	var xhr = new XMLHttpRequest();
 	var JS = null;
 	
-	xhr.open("GET", url, false);	// synchronize
+	xhr.open("GET", url);	// synchronize
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 	xhr.onreadystatechange = function() 
@@ -181,7 +181,7 @@ function PapagoTranslate(src, dst, e)
 	
 	var JS = null;
 	
-	for (var i = 0; !(JS = getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
+	for (var i = 0; !(JS = await getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
 	
 	if (!JS.translatedText)
 		return null;
