@@ -26,7 +26,7 @@ var prevContents = null;
 // }
 
 function getSrc(){
-	return new Promise((resolve, reject) =>{
+	return new Promise((resolve, reject) => {
 		chrome.storage.sync.get('srclangunage', r => {
 			resolve(r.srclangunage);
 		});
@@ -34,7 +34,7 @@ function getSrc(){
 }
 
 function getDst(){
-	return new Promise((resolve, reject) =>{
+	return new Promise((resolve, reject) => {
 		chrome.storage.sync.get('dstlangunage', r => {
 			resolve(r.dstlangunage);
 		});
@@ -42,24 +42,34 @@ function getDst(){
 }
 
 function getExecute(){
-	return new Promise((resolve, reject) =>{
+	return new Promise((resolve, reject) => {
 		chrome.storage.sync.get('execute', r => {
 			resolve(r.execute);
 		});
 	})
 }
 
+function getLogging(){
+	return new Promise((resolve, reject) => {
+		chrome.storage.sync.get('logging', r => {
+			resolve(r.logging);
+		});
+	})
+}
+
+function putTranslateDB(str)
+{
+	var prd = window.localStorage;
+	prd.setItem('65saveTranslate', prd.getItem('65saveTranslate') + str + '\n');
+}
+
 document.addEventListener("click", async function (ev) 
 {
-	//chrome.storage.sync.get('execute', function (r) {
-	//	if (!r['execute'])
-	//		return;
-	//});	
-
 	let src_language = await getSrc(); //src_language 긁어옴
 	let dst_language = await getDst(); //dst_language 긁어옴
 	let execute = await getExecute(); //execute 긁어옴
-
+	let logging = await getLogging(); //logging 긁어옴
+	
 	var selection = window.getSelection().toString(); //선택한 텍스트 뽑음
 	var obj;
 
@@ -70,6 +80,9 @@ document.addEventListener("click", async function (ev)
 		
 		obj.parentNode.removeChild(obj); //div태그 삭제
 	}
+		
+	if (!execute)
+		return;
 	
 	if ( function(e) 
 	{
@@ -136,6 +149,8 @@ document.addEventListener("click", async function (ev)
 	if( selection != '' && prevContents != selection )
 	{
 		prevContents = selection = selection.replace(/\n/g, "");	// 개행문자 제거
+		
+		putTranslateDB(selection);
 		
 		var div = document.createElement("div"); //div태그 생성
 		var tName = prevName = function(e) {

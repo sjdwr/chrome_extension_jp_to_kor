@@ -8,30 +8,34 @@
 	</head>
       
 	<body>
-
-		<label class="sjdwr_papago_jp_to_kor_switch">
-			<input id="execute" name="execute" type="checkbox">
-			<span class="sjdwr_papago_jp_to_kor_slider sjdwr_papago_jp_to_kor_round"></span>
-		  </label>
-
-		<h3 id="test">드래그 언어 : </h3>
+		<h3 id="test">드래그 언어</h3>
 		<select class="select_language" id="src_language" onchange="src_procedure(this)">
 			<option value="ko" selected>한국어</option>
 			<option value="en">영어</option>
 			<option value="ja">일본어</option>
 		</select>
-		<h3 id="test">번역 언어 : </h3>
+		<h3 id="test">번역 언어</h3>
 		<select class="select_language" id="dst_language" onchange="dst_procedure(this)">
 			<option value="ko">한국어</option>
 			<option value="en" selected>영어</option>
 			<option value="ja">일본어</option>
 		</select>
-		<div id="alert_div" style="padding-top: 10px">
-			<font id="alert" size=2 color="red"></font>
-		</div>
-		<div class="options">
-			<p><input type="checkbox" id="op_excute" value="true" checked> jp_to_kor 를 사용합니다.</p>
-			<p><input type="checkbox" id="op_logger" value="true" checked> 번역 결과를 저장합니다.</p>
+
+		<div class="padding-top: 20px; overflow:hidden">
+			<div style="overflow:hidden;padding:10px 0;padding-top:20px">
+				<span>jp_to_kor 를 사용합니다.</span>
+				<label class="sjdwr_papago_jp_to_kor_switch" style="float:right">
+					<input id="op_execute" type="checkbox">
+					<span class="sjdwr_papago_jp_to_kor_slider sjdwr_papago_jp_to_kor_round"></span>
+				</label>
+			</div>
+			<div>
+				<span>번역 결과를 보관합니다.</span>
+				<label class="sjdwr_papago_jp_to_kor_switch" style="float:right">
+					<input id="op_log" type="checkbox">
+					<span class="sjdwr_papago_jp_to_kor_slider sjdwr_papago_jp_to_kor_round"></span>	
+				</label>
+			</div>
 		</div>
 	</body> 
 </html>

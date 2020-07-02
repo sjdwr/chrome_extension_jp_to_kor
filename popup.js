@@ -4,11 +4,15 @@ function()
 {
 	var src_ctrl = document.getElementById('src_language');  
 	var dst_ctrl = document.getElementById('dst_language');  
-	var op_excute_ctrl = document.getElementById('op_excute');  
-	var alert_tag = document.getElementById('alert');  
-	
+	var op_excute_ctrl = document.getElementsByClassName("sjdwr_papago_jp_to_kor_switch")[0].children["op_execute"];  
+	var op_log_ctrl = document.getElementsByClassName("sjdwr_papago_jp_to_kor_switch")[1].children["op_log"]; 
+
 	chrome.storage.sync.get('execute', function (r) {
 		op_excute_ctrl.checked = r['execute'];
+	});
+	
+	chrome.storage.sync.get('logging', function (r) {
+		op_log_ctrl.checked = r['logging'];
 	});
 	
 	chrome.storage.sync.get('srclangunage', function (r) {
@@ -31,11 +35,14 @@ function()
 		chrome.storage.sync.set({'execute': op_excute_ctrl.checked});
 	});
 	
+	op_log_ctrl.addEventListener("change", function(e)
+	{
+		chrome.storage.sync.set({'logging': op_log_ctrl.checked});
+	});
+	
 	// 번역할 언어 콤보박스 리스너
 	src_ctrl.addEventListener("change", function(e)
 	{
-		alert_tag.innerHTML = "페이지를 새로고침 하십시오";
-			
 		if (src_ctrl.value == dst_ctrl.value)
 		{
 			src_ctrl.selectedIndex = dst_ctrl.selectedIndex;
@@ -52,8 +59,6 @@ function()
 	// 번역결과 언어 콤보박스 리스너
 	dst_ctrl.addEventListener("change", function(e)
 	{
-		alert_tag.innerHTML = "페이지를 새로고침 하십시오";
-		
 		if (dst_ctrl.value == src_ctrl.value)
 		{
 			dst_ctrl.selectedIndex = src_ctrl.selectedIndex;
