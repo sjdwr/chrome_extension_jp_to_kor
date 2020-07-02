@@ -157,6 +157,7 @@ document.addEventListener("click", async function (ev)
 			origin: "content"
 		}, function (response) 
 		{ 
+			console.log(response.trans)
 			if (null == response)
 				div.innerHTML = "<p>서버와 통신이 끊겼습니다.</p>";
 			else

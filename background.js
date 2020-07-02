@@ -180,8 +180,8 @@ function PapagoTranslate(src, dst, e)
 	*/
 	
 	var JS = null;
-	
-	for (var i = 0; !(JS = getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
+	JS = getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)
+	// for (var i = 0; !(JS = getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
 	
 	if (!JS.translatedText)
 		return null;
