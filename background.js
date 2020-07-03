@@ -121,7 +121,7 @@ function getRequest(url)
 	var xhr = new XMLHttpRequest();
 	var JS = null;
 	
-	xhr.open("GET", url);	// synchronize
+	xhr.open("GET", url, false);	// synchronize
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 	xhr.onreadystatechange = function() 
@@ -181,7 +181,7 @@ function PapagoTranslate(src, dst, e)
 	
 	var JS = null;
 	
-	for (var i = 0; !(JS = await getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
+	for (var i = 0; !(JS = getRequest('http://spspwl.dothome.co.kr/b.php?d=' + json)) && i < 3; ++i);
 	
 	if (!JS.translatedText)
 		return null;
@@ -270,15 +270,20 @@ function PapagoPhoneticCharacters(lan, e)
 //contentjs에서 보낸 메시지를 여기서 받음.
 //papagoTranslate를 하고 return값을 contentjs로 다시 보냄.
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.origin === 'content') {
-        console.log("background: "+ message.subject);
-        var translate = PapagoTranslate(message.to, message.from, message.body);
-		sleep(500);
-		var phonetic = PapagoPhoneticCharacters(message.to, message.body);
-        sendResponse({
-            trans: translate,
-			ph: phonetic,
-        })
-    } 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => 
+{
+	switch (message.type)
+	{
+		case "translation":
+		{
+			console.log("translation body: " + message.subject);
+			
+			var translate = PapagoTranslate(message.to, message.from, message.body);
+			sleep(500);
+			var phonetic = PapagoPhoneticCharacters(message.to, message.body);
+			
+			sendResponse({trans: translate, ph: phonetic});
+			break;
+		}
+	}
 });

@@ -6,6 +6,7 @@ function()
 	var dst_ctrl = document.getElementById('dst_language');  
 	var op_excute_ctrl = document.getElementsByClassName("sjdwr_papago_jp_to_kor_switch")[0].children["op_execute"];  
 	var op_log_ctrl = document.getElementsByClassName("sjdwr_papago_jp_to_kor_switch")[1].children["op_log"]; 
+	var trans_record_link = document.getElementById('trecordopen');  
 
 	chrome.storage.sync.get('execute', function (r) {
 		op_excute_ctrl.checked = r['execute'];
@@ -32,11 +33,27 @@ function()
 	// 옵션
 	op_excute_ctrl.addEventListener("change", function(e)
 	{
+		// jp_to_kor 작동유무
 		chrome.storage.sync.set({'execute': op_excute_ctrl.checked});
 	});
 	
 	op_log_ctrl.addEventListener("change", function(e)
 	{
+		// 번역 기록 작동유무
+		
+		// 번역 기록 삭제
+		if (!op_log_ctrl.checked)
+		{
+			// content.js에게 localStorage를 비우라고 요청한다.
+			chrome.tabs.query({currentWindow: true, active: true}, 
+				function (tabs)
+				{
+					var activeTab = tabs[0];
+					chrome.tabs.sendMessage(activeTab.id, {type: "deletesaveTranslate"});
+				}
+			);
+		}
+		
 		chrome.storage.sync.set({'logging': op_log_ctrl.checked});
 	});
 	
@@ -70,5 +87,18 @@ function()
 		
 		chrome.storage.local.set({'tmp_dst': dst_ctrl.selectedIndex});
 		chrome.storage.sync.set({'dstlangunage': dst_ctrl.value});
+	});
+	
+	trans_record_link.addEventListener("click", function(e)
+	{
+		// 팝업 창의 '번역 기록'이라는 하이퍼링크를 클릭했을 시 이벤트
+		chrome.tabs.query({currentWindow: true, active: true}, 
+			function (tabs)
+			{
+				// background.js 에 보내는 메세지와는 다른 함수를 써야 합니다.
+				var activeTab = tabs[0];
+				chrome.tabs.sendMessage(activeTab.id, {type: "opentransRecord"});
+			}
+		);
 	});
 });

@@ -5,6 +5,8 @@
 
 var prevName = null;
 var prevContents = null;
+var nowBlindName = null;
+var ListBoxObject = null;
 // var src_language = null; 
 // var dst_language = null;
 
@@ -25,12 +27,20 @@ var prevContents = null;
 // 		dst_language = "en";
 // }
 
-function getSrc(){
-	return new Promise((resolve, reject) => {
-		chrome.storage.sync.get('srclangunage', r => {
-			resolve(r.srclangunage);
-		});
-	})
+function generateRandomString(e) 
+{
+	var rs = '';
+	var ch = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	var chLen = ch.length;
+	var i = 0;
+   
+	if ( e > 0 )
+		i = (rs = ch.charAt(Math.floor(Math.random() * chLen - 10))) && 1;
+   
+	for ( ; i < e; ++i ) 
+		rs += ch.charAt(Math.floor(Math.random() * chLen));
+   
+	return rs;
 }
 
 function getDst(){
@@ -56,11 +66,339 @@ function getLogging(){
 		});
 	})
 }
-
-function putTranslateDB(str)
+	
+function getSrc(){
+	return new Promise((resolve, reject) => {
+		chrome.storage.sync.get('srclangunage', r => {
+			resolve(r.srclangunage);
+		});
+	})
+}
+	
+window.onload = async function()
 {
+	var ex = await getExecute();
+	
+	if (!ex)
+		return;
+	
+	nowBlindName = generateRandomString(18);
+	
+	var hrdcode = 	// 번역 기록 모달 HTML 소스
+	'<a href="#" class="cssLoader_ModalLayout" id="translaterecordopen" aria-hidden="true"></a>' +
+	'<div class="cssLoader_ModalDialog">' +
+	'	<div class="cssLoader_ModalHeader">' +
+	'		<h2>번역 기록</h2>' +
+	'		<a href="#" class="cssLoader_ModalButton_Close" aria-hidden="true">×</a>' +
+	'	</div>' +
+	'	<div class="cssLoader_ModalBody">' +
+	'	</div>' +
+	'	<div class="cssLoader_ModalFooter">' + 
+	'		<a href="#" class="cssLoader_ModalButton">확인</a>' +
+	'	</div>' +
+	'</div>';
+
+	var sec = document.createElement("section"); 	//	section 생성
+	var style = document.createElement("style");
+	
+	// 다음의 CSS 코드는 modal.css 를 압축시킨 코드 입니다.
+	style.innerHTML = '.cssLoader_ModalButton{background:#428bca;border:darken(#428bca, 5%) solid 1px;border-radius:3px;color:#fff;display:inline-block;font-size:14px;padding:8px 15px;text-decoration:none;text-align:center;min-width:60px;position:relative;transition:color .1s ease}.cssLoader_ModalButton_Close{color:#aaa;font-size:30px;text-decoration:none;position:absolute;right:5px;top:0}.cssLoader_ModalButton_Close:hover{color:darken(#aaa,10%)}.cssLoader_ModalLayout:before{content:"";background:rgba(0,0,0,0);position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1}.cssLoader_ModalLayout:target:before{-webkit-transition:-webkit-transform unquote("0.9s ease-out");-moz-transition:-moz-transform unquote("0.9s ease-out");-o-transition:-o-transform unquote("0.9s ease-out");transition:transform unquote("0.9s ease-out");z-index:100000000;background:rgba(0,0,0,.6)}.cssLoader_ModalLayout:target+.cssLoader_ModalDialog{-webkit-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0);top:20%}.cssLoader_ModalDialog{background:#fefefe;border:#333 solid 1px;border-radius:5px;margin-left:-200px;position:fixed;left:50%;top:-100%;z-index:100000001;width:360px;-webkit-transform:translate(0, -500%);-ms-transform:translate(0, -500%);transform:translate(0, -500%);-webkit-transition:-webkit-transform 0.3s ease-out;transition:transform 0.3s ease-out}.cssLoader_ModalDialog a{text-decoration:none;color:#fff}.cssLoader_ModalBody{padding:20px}.cssLoader_ModalHeader,.cssLoader_ModalFooter{padding:10px 20px}.cssLoader_ModalHeader{border-bottom:#eee solid 1px}.cssLoader_ModalHeader h2{font-size:20px}.cssLoader_ModalFooter{border-top:#eee solid 1px;text-align:right}'.replace(/cssLoader_Modal/g, nowBlindName);
+	sec.innerHTML = hrdcode.replace(/cssLoader_Modal/g, nowBlindName); // 태그 이름을 추적 불가능한 익명화에 가까운 작업을 합니다.
+	
+	document.head.insertBefore(style, document.head.childNodes[0]);	// 모달 css를 웹 페이지 head 부분에 넣습니다.
+	document.body.insertBefore(sec, document.body.childNodes[0]);	// 모달 HTML 코드를 body 부분에 넣습니다.
+
+	var ListBoxSpace = document.getElementsByClassName(nowBlindName + 'Body')[0];
+	var Arguments = {							// ListBox Arguments
+		Base: ListBoxSpace,
+		Rows: 11,
+		Width: 500,
+		NormalItemColor: null,
+		NormalItemBackColor: null,
+		AlternateItemColor: null,
+		AlternateItemBackColor: null,
+		SelectedItemColor: null,
+		SelectedIItemBackColor: null,
+		HoverItemColor: null,
+		HoverItemBackColor: null,
+		HoverBorderdColor: null,
+		ClickEventHandler: null//OnClick
+	};
+	
+	ListBoxObject = new MakeRecordListBox(Arguments); 	// 디자인된 리스트 박스를 생성함.
+}
+
+function putTranslateDB(str, transtr)
+{
+	// 임시 저장소에 번역을 기록함.
+	
 	var prd = window.localStorage;
-	prd.setItem('65saveTranslate', prd.getItem('65saveTranslate') + str + '\n');
+	var _db = prd.getItem('jp_to_kor_65saveTranslate');
+	var _dbs = [];
+	
+	if (_db)
+		_dbs = _db.split('\n');
+	else 
+		_db = "";
+	
+	for (var i = 0; i < _dbs.length; i=i+2)
+	{
+		if (_dbs[i] == str)
+			return;
+	}
+	
+	prd.removeItem('jp_to_kor_65saveTranslate');
+	prd.setItem('jp_to_kor_65saveTranslate', _db + str + '\n' + transtr + '\n');
+}
+
+function MakeRecordListBox(Arguments)
+{
+	//저작권 정보
+	//MakeRecordListBox.js
+	//Version: 1.0
+	//This script is created by Samir Nigam. Do not remove, modify, or hide the author information. keep it intact.
+	//Mail: nigam.samir@hotmail.com
+
+    //Public property Version.
+    this.Version = '1.0';
+	
+	//Local variables.
+    var Ids = 0;
+    var EventHandlers = new Array();
+	
+	var Base = Arguments.Base ? Arguments.Base : document.documentElement;
+	var NormalItemColor = Arguments.NormalItemColor ? Arguments.NormalItemColor : 'Black';
+	var NormalItemBackColor = Arguments.NormalItemBackColor ? Arguments.NormalItemBackColor : '#ffffff';
+	var AlternateItemColor = Arguments.AlternateItemColor ? Arguments.AlternateItemColor : 'Black';
+	var AlternateItemBackColor = Arguments.AlternateItemBackColor ? Arguments.AlternateItemBackColor : '#E0E0E0';
+	var SelectedItemColor = Arguments.SelectedItemColor ? Arguments.SelectedItemColor : '#ffffff';
+	var SelectedIItemBackColor = Arguments.SelectedIItemBackColor ? Arguments.SelectedIItemBackColor : '#E6A301';
+	var HoverItemColor = Arguments.HoverItemColor ? Arguments.HoverItemColor : '#ffffff';
+	var HoverItemBackColor = Arguments.HoverItemBackColor ? Arguments.HoverItemBackColor : '#2259D7';
+	var HoverBorderdColor = Arguments.HoverBorderdColor ? Arguments.HoverBorderdColor : 'orange';
+	var ClickEventHandler = Arguments.ClickEventHandler ? Arguments.ClickEventHandler : function(){ }; 
+ 
+	//Create div for list box.
+    var MakeRecordListBoxDiv = document.createElement('div');
+	MakeRecordListBoxDiv.style.backgroundColor = '#ffffff';
+    MakeRecordListBoxDiv.style.textAlign = 'left';
+    MakeRecordListBoxDiv.style.verticalAlign = 'top';
+    MakeRecordListBoxDiv.style.cursor = 'default';
+    MakeRecordListBoxDiv.style.borderStyle = 'inset';
+    MakeRecordListBoxDiv.style.overflow = 'auto';
+    MakeRecordListBoxDiv.style.width = '100%';
+	MakeRecordListBoxDiv.style.height = '200px';
+	
+    this.AddItem = function(_Text, _Value)
+	{
+        var Item = null;
+		var CheckBox = null;        
+        var Span = null;
+		var Ptag = null;
+		
+        Item = document.createElement('div');        
+        Item.style.backgroundColor = Ids % 2 == 0 ? NormalItemBackColor : AlternateItemBackColor;
+        Item.style.color = Ids % 2 == 0 ? NormalItemColor : AlternateItemColor;
+	    Item.style.fontWeight = 'normal';
+	    Item.style.fontFamily = 'Verdana';
+	    Item.style.fontSize = '10pt';
+        Item.style.textAlign = 'left';
+        Item.style.verticalAlign = 'middle'; 
+        Item.style.cursor = 'default';
+        Item.style.borderTop = Ids % 2 == 0 ? '1px solid ' + NormalItemBackColor : '1px solid ' + AlternateItemBackColor;
+        Item.style.borderBottom = Ids % 2 == 0 ? '1px solid ' + NormalItemBackColor : '1px solid ' + AlternateItemBackColor;
+        Item.style.overflow = 'hidden';
+        Item.style.textOverflow = 'ellipsis';
+		Item.style.height = '50px';
+		Item.ItemIndex = Ids;
+		
+        CheckBox = document.createElement('input');
+        CheckBox.type = 'checkbox';
+        Item.appendChild(CheckBox);
+			
+        Span = document.createElement('span');
+		Ptag = document.createElement('p');
+		
+        Span.innerHTML = _Text;   
+        Span.title = _Text; 
+		
+		Ptag.innerHTML = _Value;   
+        Ptag.title = _Value; 
+		Ptag.setAttribute("style", "margin:0; padding:0; padding-top:3px; padding-left:5px;");
+		
+		Span.style.fontSize = '15pt';
+		Ptag.style.fontSize = '9pt';
+		
+	    Item.appendChild(Span);
+	    Item.appendChild(Ptag);
+		
+	    MakeRecordListBoxDiv.appendChild(Item);
+		
+	    //Register events.
+	    WireUpEventHandler(Item, 'mouseover', function(){ OnMouseOver(CheckBox, Item); });
+	    WireUpEventHandler(Item, 'mouseout', function(){ OnMouseOut(CheckBox, Item); });
+	    WireUpEventHandler(Item, 'selectstart', function(){ return false; });
+	    WireUpEventHandler(CheckBox, 'click', function(){ OnClick(CheckBox, Item); });
+	    WireUpEventHandler(CheckBox, 'click', function(){ ClickEventHandler(CheckBox, { IsSelected: CheckBox.checked, Text: _Text, Value: _Value, ItemIndex: Item.ItemIndex }); });   
+	    
+	    //Ids++;
+	}
+	
+    //Public method GetItems.
+    this.GetItems = function()
+	{
+        var Items = new Array();
+		
+		var Divs = MakeRecordListBoxDiv.getElementsByTagName('div');
+		
+        for(var n = 0; n < Divs.length; ++n)    
+			Items.push({IsSelected: Divs[n].childNodes[0].checked, Text: Divs[n].childNodes[1].innerHTML, Value: Divs[n].childNodes[1].value, ItemIndex: Divs[n].ItemIndex});  
+       		
+        return Items;
+    }
+	
+    //Public method Dispose.
+	this.Dispose = function()
+	{
+	    while(EventHandlers.length > 0)
+	        DetachEventHandler(EventHandlers.pop());
+			
+	    Base.removeChild(MakeRecordListBoxDiv);
+	}
+	
+	//Public method Contains.
+	this.Contains = function(Index)
+	{
+		return typeof(Index) == 'number' && MakeRecordListBoxDiv.childNodes[Index] ? true : false;
+	}
+	
+	//Public method GetItem.
+	this.GetItem = function(Index)
+	{	    
+	    var Divs = MakeRecordListBoxDiv.getElementsByTagName('div');
+		
+	    return this.Contains(Index) ? { IsSelected: Divs[Index].childNodes[0].checked, Text: Divs[Index].childNodes[1].innerHTML, Value: Divs[Index].childNodes[1].value, ItemIndex: Index} : null;
+	}
+	
+	//Public method DeleteItem.
+	this.DeleteItem = function(Index)
+	{
+	    if(!this.Contains(Index)) return false;
+	    
+	    try
+	    {
+			MakeRecordListBoxDiv.removeChild(MakeRecordListBoxDiv.childNodes[Index]);
+	    }
+	    catch(err)
+	    {
+			return false;
+	    }
+	    
+	    return true;
+	}
+	
+	//Public method DeleteItems.
+	this.DeleteItems = function()
+	{
+	    var ItemsRemoved = 0;
+	    
+	    for(var n = MakeRecordListBoxDiv.childNodes.length - 1; n >= 0; --n)   
+	        try
+	        {
+				MakeRecordListBoxDiv.removeChild(MakeRecordListBoxDiv.childNodes[n]);
+				ItemsRemoved++;
+	        }
+	        catch(err)
+	        {
+			    break;
+	        }
+	        
+	   return ItemsRemoved;
+	}
+	
+	//Public method GetTotalItems.
+	this.GetTotalItems = function()
+	{
+	    return MakeRecordListBoxDiv.childNodes.length;
+	}
+	
+    //Item mouseover event handler.
+    var OnMouseOver = function(CheckBox, Item)
+    {
+        if(CheckBox.checked) return;
+				
+        Item.bgColor = Item.style.backgroundColor;
+	    Item.fColor = Item.style.color;
+	    Item.bColor = Item.style.borderTopColor;
+        Item.style.backgroundColor = HoverItemBackColor;
+		Item.style.color = HoverItemColor;
+		Item.style.borderTopColor = Item.style.borderBottomColor = HoverBorderdColor;
+		Item.style.fontWeight = 'bold';
+    }
+    
+    //Item mouseout event handler.
+    var OnMouseOut = function(CheckBox, Item)
+    {
+        if(CheckBox.checked) return;
+				
+		Item.style.backgroundColor = Item.bgColor;
+	    Item.style.color = Item.fColor;
+	    Item.style.borderTopColor = Item.style.borderBottomColor = Item.bColor;
+		Item.style.fontWeight = 'normal';
+    }
+    
+    //CheckBox click event handler.
+	var OnClick = function(CheckBox, Item)
+	{	
+	    if(CheckBox.checked)
+        {
+			Item.style.backgroundColor = SelectedIItemBackColor;
+			Item.style.color = SelectedItemColor;
+			Item.style.borderTopColor = Item.style.borderBottomColor = SelectedIItemBackColor;
+        }
+        else
+        {
+            Item.style.backgroundColor = HoverItemBackColor;
+		    Item.style.color = HoverItemColor;
+			Item.style.borderTopColor = Item.style.borderBottomColor = HoverBorderdColor;
+        }
+	} 
+	
+    //Private anonymous method to wire up event handlers.
+	var WireUpEventHandler = function(Target, Event, Listener)
+	{
+	    //Register event.
+	    if(Target.addEventListener)	   
+			Target.addEventListener(Event, Listener, false);	    
+	    else if(Target.attachEvent)	   
+			Target.attachEvent('on' + Event, Listener);
+	    else 
+	    {
+			Event = 'on' + Event;
+			Target.Event = Listener;	 
+		}
+		
+	    //Collect event information through object literal.
+	    var EVENT = { Target: Target, Event: Event, Listener: Listener }
+	    EventHandlers.push(EVENT);
+	}
+	
+	//Private anonymous  method to detach event handlers.
+	var DetachEventHandler = function(EVENT)
+	{
+	    if(EVENT.Target.removeEventListener)	   
+			EVENT.Target.removeEventListener(EVENT.Event, EVENT.Listener, false);	    
+	    else if(EVENT.Target.detachEvent)	   
+			EVENT.Target.detachEvent('on' + EVENT.Event, EVENT.Listener);
+	    else 
+		{
+			EVENT.Event = 'on' + EVENT.Event;
+			EVENT.Target.EVENT.Event = null;	 
+	    }
+	}
+	 
+	WireUpEventHandler(MakeRecordListBoxDiv, 'contextmenu', function(){ return false; });
+    Base.appendChild(MakeRecordListBoxDiv);
 }
 
 document.addEventListener("click", async function (ev) 
@@ -73,19 +411,33 @@ document.addEventListener("click", async function (ev)
 	var selection = window.getSelection().toString(); //선택한 텍스트 뽑음
 	var obj;
 
-	if( prevName && (obj = document.getElementById(prevName)) )
+	if ( prevName && (obj = document.getElementById(prevName)) )
 	{
-		if ( ev.toElement.offsetParent === obj ) 
+		if ( ev.toElement.offsetParent === obj ) // 번역 결과 팝업에서 드래그 이벤트가 일어났다면 중지한다.
 			return;
 		
 		obj.parentNode.removeChild(obj); //div태그 삭제
 	}
-		
-	if (!execute)
+	
+	var linkedList = ev.toElement;
+	
+	if (obj = document.getElementsByClassName(nowBlindName + "Dialog")[0])
+	{
+		// 드래그 할 시 부모를 좇아 번역 기록 창에서 드래그 한건지 알아내는 코드 입니다.
+		while (linkedList = linkedList.offsetParent)
+		{
+			if (linkedList === obj)
+				return;
+		}
+	}
+
+	if (!execute || !selection)	// selection 내용이 null이거나 jp_to_kor 가 비활성화 되면 더 이상 실행시키지 않습니다.
 		return;
 	
 	if ( function(e) 
 	{
+		// 유효성 검사 코드 입니다. 
+		
 		var sp = 0;
 		
 		switch (src_language)
@@ -149,15 +501,9 @@ document.addEventListener("click", async function (ev)
 	if( selection != '' && prevContents != selection )
 	{
 		prevContents = selection = selection.replace(/\n/g, "");	// 개행문자 제거
-		
-		putTranslateDB(selection);
-		
+
 		var div = document.createElement("div"); //div태그 생성
-		var tName = prevName = function(e) {
-			for (var a = "", t = 0; t < e; t++)
-				a += String.fromCharCode(Math.floor(80 * Math.random() + 43));
-			return a;
-		}(18);
+		var tName = prevName = generateRandomString(18);
 
 		div.setAttribute("id", tName);	//div태그에 id 부여
 		document.body.insertBefore(div, document.body.childNodes[0]); //html의 body 태그 첫번째child로 div태그 주입
@@ -169,7 +515,7 @@ document.addEventListener("click", async function (ev)
 			to: src_language,
 			from: dst_language,
 			body: selection,
-			origin: "content"
+			type: "translation"
 		}, function (response) 
 		{ 
 			if (null == response)
@@ -178,6 +524,9 @@ document.addEventListener("click", async function (ev)
 			{
 				var _Encode = encodeURIComponent(selection); // 번역주소와 읽는주소(tts)가 다르기 때문에 번역결과와 다른 음성이 나올 수 있습니다. 똑같이 하고싶으면 dd[2] 를 쓰고 아닐경우 selection을 쓰시오.
 				
+				if (logging)	// 번역 기록 유무를 저장하는 변수
+					putTranslateDB(selection, response.trans);	
+		
 				div.innerHTML = 
 				"<p>"+
 					response.trans+
@@ -199,11 +548,44 @@ document.addEventListener("click", async function (ev)
 				var lass = div.getBoundingClientRect();
 				
 				if ( lass.x < 1 )
-					div.style.left = (ev.clientX + -lass.x) + "px";
+					div.style.left = (ev.clientX + -lass.x) + "px";	// 번역결과 팝업창이 왼쪽 화면 밖을 벗어날 경우, 벗어난 만큼 오른쪽으로 이동
 			}
 		});
 	}
 	else prevContents = null;
 });
 
+chrome.runtime.onMessage.addListener((message, sender) => 
+{
+	switch (message.type)
+	{
+		case "opentransRecord":
+		{
+			// 번역 기록 모달 창을 여는 메세지 입니다.
+			console.log("opentransRecord");
 
+			if (!ListBoxObject)	// 정상적으로 모달 창 안의 리스트 박스 객체가 없으면 무효화 시킵니다.
+				return;
+
+			ListBoxObject.DeleteItems();	// 매 번 실행할 때 마다 리스트 박스 안의 내용을 지웁니다.
+			
+			var storageStr = window.localStorage.getItem('jp_to_kor_65saveTranslate');	// 임시 저장소에서 저장된 번역 기록을 가져옵니다.
+			var db = [];
+			
+			if (ListBoxObject && storageStr && (db = storageStr.split('\n')))
+			{
+				for (var i = db.length - 2; i > 0; i = i - 2)
+					ListBoxObject.AddItem(db[i - 1], db[i]);	// 내림차순으로 리스트 박스에 원문과 뜻을 추가시킵니다.
+			}
+
+			document.location.href = '#translaterecordopen';	// 링크 뒤에 해당 문자를 넣음으로써 css가 인지하고 모달창을 visible 합니다.
+			break;
+		}
+		case "deletesaveTranslate":
+		{
+			// 이것은 번역기록을 담고 있는 임시저장소 안의 데이터를 삭제시키는 메세지 입니다.
+			window.localStorage.removeItem('jp_to_kor_65saveTranslate'); // extension이 사용하는 것만 삭제한다.
+			break;
+		}
+	}
+});

@@ -1,0 +1,100 @@
+
+.cssLoader_ModalButton{
+  background: #428bca;
+  border: darken(#428bca, 5%) solid 1px;
+  border-radius: 3px;
+  color: #fff;
+  display: inline-block;
+  font-size: 14px;
+  padding: 8px 15px;
+  text-decoration: none;
+  text-align: center;
+  min-width: 60px;
+  position: relative;
+  transition: color .1s ease;
+}
+
+.cssLoader_ModalButton_Close{
+  color: #aaa;
+  font-size: 30px;
+  text-decoration: none;
+  position: absolute; right: 5px; top: 0;
+}
+  .cssLoader_ModalButton_Close:hover{
+     color: darken(#aaa, 10%);
+  }
+  
+
+  .cssLoader_ModalLayout:before{
+    content: ""; 
+    background: rgba(0,0,0,0); 
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0; 
+    z-index: -1;
+    
+  }
+  
+    .cssLoader_ModalLayout:target:before{
+		
+		  -webkit-transition: -webkit-transform unquote("0.9s ease-out");
+     -moz-transition: -moz-transform unquote("0.9s ease-out");
+       -o-transition: -o-transform unquote("0.9s ease-out");
+          transition: transform unquote("0.9s ease-out");
+		  
+    z-index:100000000;  
+    background: rgba(0,0,0,.6); 
+    } 
+
+
+
+.cssLoader_ModalLayout:target + .cssLoader_ModalDialog{
+        -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+          transform: translate(0, 0);
+      top: 20%;  
+}
+
+.cssLoader_ModalDialog{
+  background: #fefefe;
+  border: #333 solid 1px;
+  border-radius: 5px;
+  margin-left: -200px;
+  position: fixed; 
+  left: 50%; 
+  top: -100%;  
+  z-index: 100000001; 
+  width: 360px;
+  -webkit-transform: translate(0, -500%);
+  -ms-transform: translate(0, -500%);
+  transform: translate(0, -500%);  
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+}
+
+.cssLoader_ModalDialog a{
+	text-decoration: none;
+	color:#fff;
+}
+
+.cssLoader_ModalBody{
+  padding: 20px;
+}
+
+.cssLoader_ModalHeader,
+.cssLoader_ModalFooter{
+  padding: 10px 20px;
+}
+
+.cssLoader_ModalHeader{
+  border-bottom: #eee solid 1px;
+}
+
+.cssLoader_ModalHeader h2{
+  font-size: 20px;
+}
+  
+.cssLoader_ModalFooter{
+  border-top: #eee solid 1px;
+  text-align: right;
+}
+ 
