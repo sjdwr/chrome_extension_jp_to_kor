@@ -75,61 +75,65 @@ function getSrc(){
 	})
 }
 	
-window.onload = async function()
+async function getExecuteSync()
 {
-	var ex = await getExecute();
-	
-	if (!ex)
-		return;
-	
-	nowBlindName = generateRandomString(18);
-	
-	var hrdcode = 	// 번역 기록 모달 HTML 소스
-	'<a href="#" class="cssLoader_ModalLayout" id="translaterecordopen" aria-hidden="true"></a>' +
-	'<div class="cssLoader_ModalDialog">' +
-	'	<div class="cssLoader_ModalHeader">' +
-	'		<h2>번역 기록</h2>' +
-	'		<a href="#" class="cssLoader_ModalButton_Close" aria-hidden="true">×</a>' +
-	'	</div>' +
-	'	<div class="cssLoader_ModalBody">' +
-	'	</div>' +
-	'	<div class="cssLoader_ModalFooter">' + 
-	'		<a href="#" class="cssLoader_ModalButton">확인</a>' +
-	'	</div>' +
-	'</div>';
+	return await getExecute();
+}
 
-	var sec = document.createElement("section"); 	//	section 생성
-	var style = document.createElement("style");
-	
-	// 다음의 CSS 코드는 modal.css 를 압축시킨 코드 입니다.
-	style.innerHTML = '.cssLoader_ModalButton{background:#428bca;border:darken(#428bca, 5%) solid 1px;border-radius:3px;color:#fff;display:inline-block;font-size:14px;padding:8px 15px;text-decoration:none;text-align:center;min-width:60px;position:relative;transition:color .1s ease}.cssLoader_ModalButton_Close{color:#aaa;font-size:30px;text-decoration:none;position:absolute;right:5px;top:0}.cssLoader_ModalButton_Close:hover{color:darken(#aaa,10%)}.cssLoader_ModalLayout:before{content:"";background:rgba(0,0,0,0);position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1}.cssLoader_ModalLayout:target:before{-webkit-transition:-webkit-transform unquote("0.9s ease-out");-moz-transition:-moz-transform unquote("0.9s ease-out");-o-transition:-o-transform unquote("0.9s ease-out");transition:transform unquote("0.9s ease-out");z-index:100000000;background:rgba(0,0,0,.6)}.cssLoader_ModalLayout:target+.cssLoader_ModalDialog{-webkit-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0);top:20%}.cssLoader_ModalDialog{background:#fefefe;border:#333 solid 1px;border-radius:5px;margin-left:-200px;position:fixed;left:50%;top:-100%;z-index:100000001;width:360px;-webkit-transform:translate(0, -500%);-ms-transform:translate(0, -500%);transform:translate(0, -500%);-webkit-transition:-webkit-transform 0.3s ease-out;transition:transform 0.3s ease-out}.cssLoader_ModalDialog a{text-decoration:none;color:#fff}.cssLoader_ModalBody{padding:20px}.cssLoader_ModalHeader,.cssLoader_ModalFooter{padding:10px 20px}.cssLoader_ModalHeader{border-bottom:#eee solid 1px}.cssLoader_ModalHeader h2{font-size:20px}.cssLoader_ModalFooter{border-top:#eee solid 1px;text-align:right}'.replace(/cssLoader_Modal/g, nowBlindName);
-	sec.innerHTML = hrdcode.replace(/cssLoader_Modal/g, nowBlindName); // 태그 이름을 추적 불가능한 익명화에 가까운 작업을 합니다.
-	
-	document.head.insertBefore(style, document.head.childNodes[0]);	// 모달 css를 웹 페이지 head 부분에 넣습니다.
-	document.body.insertBefore(sec, document.body.childNodes[0]);	// 모달 HTML 코드를 body 부분에 넣습니다.
-
-	// 버그 발생해서 임시로 조치 (2020-07-04)
-	setTimeout(
-	function()
+window.onload = function()
+{
+	setTimeout(function()
 	{
-		var ListBoxSpace = document.getElementsByClassName(nowBlindName + 'Body')[0];
-		var Arguments = {							// ListBox Arguments
-			Base: ListBoxSpace,
-			Rows: 11,
-			Width: 500,
-			NormalItemColor: null,
-			NormalItemBackColor: null,
-			AlternateItemColor: null,
-			AlternateItemBackColor: null,
-			SelectedItemColor: null,
-			SelectedIItemBackColor: null,
-			HoverItemColor: null,
-			HoverItemBackColor: null,
-			HoverBorderdColor: null,
-			ClickEventHandler: null//OnClick
-		};
+		if (!getExecuteSync())
+			return;
 		
-		ListBoxObject = new MakeRecordListBox(Arguments); 	// 디자인된 리스트 박스를 생성함.
+		nowBlindName = generateRandomString(18);
+		
+		var hrdcode = 	// 번역 기록 모달 HTML 소스
+		'<a href="#" class="cssLoader_ModalLayout" id="translaterecordopen" aria-hidden="true"></a>' +
+		'<div class="cssLoader_ModalDialog">' +
+		'	<div class="cssLoader_ModalHeader">' +
+		'		<h2>번역 기록</h2>' +
+		'		<a href="#" class="cssLoader_ModalButton_Close" aria-hidden="true">×</a>' +
+		'	</div>' +
+		'	<div class="cssLoader_ModalBody">' +
+		'	</div>' +
+		'	<div class="cssLoader_ModalFooter">' + 
+		'		<a href="#" class="cssLoader_ModalButton">확인</a>' +
+		'	</div>' +
+		'</div>';
+
+		var style = document.createElement("style");
+		style.innerHTML = '.cssLoader_ModalButton{background:#428bca;border:darken(#428bca, 5%) solid 1px;border-radius:3px;color:#fff;display:inline-block;font-size:14px;padding:8px 15px;text-decoration:none;text-align:center;min-width:60px;position:relative;transition:color .1s ease}.cssLoader_ModalButton_Close{color:#aaa;font-size:30px;text-decoration:none;position:absolute;right:5px;top:0}.cssLoader_ModalButton_Close:hover{color:darken(#aaa,10%)}.cssLoader_ModalLayout:before{content:"";background:rgba(0,0,0,0);position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1}.cssLoader_ModalLayout:target:before{-webkit-transition:-webkit-transform unquote("0.9s ease-out");-moz-transition:-moz-transform unquote("0.9s ease-out");-o-transition:-o-transform unquote("0.9s ease-out");transition:transform unquote("0.9s ease-out");z-index:100000000;background:rgba(0,0,0,.6)}.cssLoader_ModalLayout:target+.cssLoader_ModalDialog{-webkit-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0);top:20%}.cssLoader_ModalDialog{background:#fefefe;border:#333 solid 1px;border-radius:5px;margin-left:-200px;position:fixed;left:50%;top:-100%;z-index:100000001;width:360px;-webkit-transform:translate(0, -500%);-ms-transform:translate(0, -500%);transform:translate(0, -500%);-webkit-transition:-webkit-transform 0.3s ease-out;transition:transform 0.3s ease-out}.cssLoader_ModalDialog a{text-decoration:none;color:#fff}.cssLoader_ModalBody{padding:20px}.cssLoader_ModalHeader,.cssLoader_ModalFooter{padding:10px 20px}.cssLoader_ModalHeader{border-bottom:#eee solid 1px}.cssLoader_ModalHeader h2{font-size:20px}.cssLoader_ModalFooter{border-top:#eee solid 1px;text-align:right}'.replace(/cssLoader_Modal/g, nowBlindName); // 다음의 CSS 코드는 modal.css 를 압축시킨 코드 입니다.
+		document.head.insertBefore(style, document.head.childNodes[0]);	// 모달 css를 웹 페이지 head 부분에 넣습니다.
+		
+		var sec = document.createElement("section"); 	//	section 생성
+		sec.innerHTML = hrdcode.replace(/cssLoader_Modal/g, nowBlindName); // 태그 이름을 추적 불가능한 익명화에 가까운 작업을 합니다.
+		document.body.insertBefore(sec, document.body.childNodes[0]);	// 모달 HTML 코드를 body 부분에 넣습니다.
+
+		// 버그 발생해서 임시로 조치 (2020-07-04)
+		setTimeout(
+		function()
+		{
+			var ListBoxSpace = document.getElementsByClassName(nowBlindName + 'Body')[0];
+			var Arguments = {							// ListBox Arguments
+				Base: ListBoxSpace,
+				Rows: 11,
+				Width: 500,
+				NormalItemColor: null,
+				NormalItemBackColor: null,
+				AlternateItemColor: null,
+				AlternateItemBackColor: null,
+				SelectedItemColor: null,
+				SelectedIItemBackColor: null,
+				HoverItemColor: null,
+				HoverItemBackColor: null,
+				HoverBorderdColor: null,
+				ClickEventHandler: null//OnClick
+			};
+				
+			ListBoxObject = new MakeRecordListBox(Arguments); 	// 디자인된 리스트 박스를 생성함.
+		}, 500);
 	}, 1000);
 }
 
@@ -556,11 +560,11 @@ document.addEventListener("click", async function (ev)
 				
 				div.innerHTML = 
 				"<p>"+
-					response.ph +
+					(src_language == "ja" ? response.ph : response.origin) +
 				"</p>" + 
 				"<br>" +
 				"<p style='font-size:25px'>" + 
-					response.trans + "&nbsp;" + 
+					(dst_language == "ja" ? response.ph : response.trans) + "&nbsp;" + 
 					"<audio id='sm'>" + 
 						"<source src='" + _Sound + _Encode + "'>" + 
 					"</audio>" + 

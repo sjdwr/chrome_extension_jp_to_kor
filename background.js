@@ -264,7 +264,7 @@ function PapagoPhoneticCharacters(lan, e)
 		//Onsen += e.substring(prv, e.length);
 	}
 	
-	return rubyTag;// + "%^@eryjdnxw32es^@%" + Onsen;
+	return rubyTag;
 }
 
 //contentjs에서 보낸 메시지를 여기서 받음.
@@ -280,9 +280,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
 			
 			var translate = PapagoTranslate(message.to, message.from, message.body);
 			sleep(500);
-			var phonetic = PapagoPhoneticCharacters(message.to, message.body);
+			var phonetic;
 			
-			sendResponse({trans: translate, ph: phonetic});
+			if (message.to == "ja")
+				phonetic = PapagoPhoneticCharacters(message.to, message.body);
+			else if (message.from == "ja")
+				phonetic = PapagoPhoneticCharacters(message.from, translate);
+			
+			sendResponse({origin: message.body, trans: translate, ph: phonetic});
 			break;
 		}
 	}
