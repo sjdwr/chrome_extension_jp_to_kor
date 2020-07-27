@@ -5,6 +5,10 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/TOP.gif.gif" width="522" height="384">
 <br><br><br><br>
 
+## 사용 기술
+* PHP
+* Javascript
+<br><br><br><br>
 ## 기능
 * 일->한 번역
 * 일어 음성
