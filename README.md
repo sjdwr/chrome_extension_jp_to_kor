@@ -10,6 +10,8 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 * 일어 음성
 * 파파고 링크
 
+* <b>일한영 번역</b> (2020.07.2)
+
 ## 설치법
 1. <a href='chrome://extensions'>chrome://extensions</a>에서 개발자 모드를 킨다 <br><br>
 <img src="https://github.com/lpaqkosw/readmeImages/blob/master/chrome_extension_jp_to_kor/devmode.gif" width="946" height="171">
@@ -25,8 +27,8 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 
 ### 추가 개발사항
 * <s>css파일 추가</s> (2020.06.30)
-* 언어 추가
+* <s>언어 추가</s> (2020.07.2)
 * 번역 이력
-* on/off
-* css 개선
+* <s>on/off</s> (2020.07.2)
+* <s>css 개선</s> (2020.07.2)
 
