@@ -10,7 +10,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 * 일어 음성
 * 파파고 링크
 
-* <b>일한영 번역</b> (2020.07.2)
+* <b>일한영 번역 (2020.07.2)</b> 
 
 ## 설치법
 1. <a href='chrome://extensions'>chrome://extensions</a>에서 개발자 모드를 킨다 <br><br>
