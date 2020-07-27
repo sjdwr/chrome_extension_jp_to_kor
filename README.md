@@ -8,6 +8,7 @@ by <a href='https://github.com/sjdwr'>sjdwr</a> and <a href='https://github.com/
 ## 사용 기술
 * PHP
 * Javascript
+* Papago API
 <br><br><br><br>
 ## 기능
 * 일->한 번역
